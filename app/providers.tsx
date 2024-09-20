@@ -34,9 +34,9 @@ function OtherProviders({ children }: { children: React.ReactNode }) {
       }}
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
-      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+      {/* <ConvexProviderWithClerk client={convex} useAuth={useAuth}> */}
         {children}
-      </ConvexProviderWithClerk>
+      {/* </ConvexProviderWithClerk> */}
     </ClerkProvider>
   );
 }
