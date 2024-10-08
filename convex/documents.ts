@@ -30,6 +30,7 @@ import {
 
       await ctx.db.insert("documents", {
         title: args.title,
+        tokenIdentifier: userId
       })
     }
   });
