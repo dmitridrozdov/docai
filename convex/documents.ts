@@ -21,6 +21,13 @@ import {
       title: v.string()
     },
     async handler(ctx, args) {
+
+      const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+
+      if (!userId) {
+        throw new ConvexError("Unauthorized");
+      }
+
       await ctx.db.insert("documents", {
         title: args.title,
       })
