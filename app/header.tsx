@@ -4,7 +4,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import Image from "next/image";
 import { HeaderActions } from "./header-actions";
 import Link from "next/link";
-import { OrganizationSwitcher } from "@clerk/nextjs";
+// import { OrganizationSwitcher } from "@clerk/nextjs";
 import { Authenticated } from "convex/react";
 
 export function Header() {
@@ -24,7 +24,7 @@ export function Header() {
           </Link>
 
           <nav className="flex items-center gap-8">
-            <OrganizationSwitcher />
+            {/* <OrganizationSwitcher /> */}
 
             <Authenticated>
               <Link href="/dashboard" className="hover:text-slate-300">
