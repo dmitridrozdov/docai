@@ -12,7 +12,16 @@ import {
 
   export const getDocuments = query({
     async handler(ctx) {
-      return await ctx.db.query("documents").collect();
+      const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+
+      if (!userId) {
+        return undefined;
+      }
+
+      return await ctx.db
+        .query("documents")
+        .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", userId))
+        .collect();
     },
   });
 
