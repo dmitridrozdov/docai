@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -16,10 +17,10 @@ import {
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
-
+            <p>Card content</p>
         </CardContent>
         <CardFooter>
-
+            <Button >View </Button>
         </CardFooter> 
         </Card>
     );
