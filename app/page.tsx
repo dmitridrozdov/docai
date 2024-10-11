@@ -19,7 +19,9 @@ export default function Home() {
         <UserButton />
       </Authenticated>
       <Button onClick={() => createDocument({title: "New Document"})}>click me</Button>
-      {documents?.map((doc) => <DocumentCard document={doc} />)}
+      <div className="grid grid-cols-4 gap-8">
+        {documents?.map((doc) => <DocumentCard document={doc} />)}
+      </div>
     </main>
   );
 }
