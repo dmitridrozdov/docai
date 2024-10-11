@@ -15,6 +15,7 @@ import { Upload } from "lucide-react";
 import { btnIconStyles, btnStyles } from "@/styles/styles";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import UploadDocumentForm from "./dashboard/documents/upload-document-form";
 
 export default function UploadDocumentButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,7 @@ export default function UploadDocumentButton() {
             Upload a team document for you to search over in the future.
           </DialogDescription>
 
+          <UploadDocumentForm onUpload={() => setIsOpen(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
