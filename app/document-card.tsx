@@ -20,7 +20,7 @@ import {
             <p>Card content</p>
         </CardContent>
         <CardFooter>
-            <Button >View </Button>
+            <Button variant="secondary">View </Button>
         </CardFooter> 
         </Card>
     );
