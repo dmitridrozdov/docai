@@ -17,11 +17,12 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { LoadingButton } from "@/components/loading-button";
 import { Id } from "@/convex/_generated/dataModel";
+import { Button } from "@/components/ui/button";
 // import { useOrganization } from "@clerk/nextjs";
 
 const formSchema = z.object({
   title: z.string().min(1).max(250),
-  file: z.instanceof(File),
+//   file: z.instanceof(File),
 });
 
 export default function UploadDocumentForm({
@@ -55,7 +56,7 @@ export default function UploadDocumentForm({
     //   fileId: storageId as Id<"_storage">,
     //   orgId: organization.organization?.id,
     });
-    onUpload();
+    // onUpload();
   }
 
   return (
@@ -74,35 +75,7 @@ export default function UploadDocumentForm({
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="file"
-          render={({ field: { value, onChange, ...fieldProps } }) => (
-            <FormItem>
-              <FormLabel>File</FormLabel>
-              <FormControl>
-                <Input
-                  {...fieldProps}
-                  type="file"
-                  accept=".txt,.xml,.doc"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
-                    onChange(file);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <LoadingButton
-          isLoading={form.formState.isSubmitting}
-          loadingText="Uploading..."
-        >
-          Upload
-        </LoadingButton>
+        <Button type="submit">Upload</Button>
       </form>
     </Form>
   );
