@@ -26,7 +26,7 @@ export default function UploadDocumentButton() {
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button className={btnStyles} onClick={() =>  createDocument({title: "New Document"})}>
+        <Button className={btnStyles}>
           <Upload className={btnIconStyles} /> Upload Document
         </Button>
       </DialogTrigger>
