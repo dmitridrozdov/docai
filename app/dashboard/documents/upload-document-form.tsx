@@ -56,7 +56,7 @@ export default function UploadDocumentForm({
     //   fileId: storageId as Id<"_storage">,
     //   orgId: organization.organization?.id,
     });
-    // onUpload();
+    onUpload();
   }
 
   return (
@@ -75,7 +75,12 @@ export default function UploadDocumentForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Upload</Button>
+        <LoadingButton
+          isLoading={form.formState.isSubmitting}
+          loadingText="Uploading..."
+        >
+          Upload
+        </LoadingButton>
       </form>
     </Form>
   );
