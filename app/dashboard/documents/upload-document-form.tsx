@@ -32,7 +32,7 @@ export default function UploadDocumentForm({
 }) {
 //   const organization = useOrganization();
   const createDocument = useMutation(api.documents.createDocument);
-//   const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
+  const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,14 +42,14 @@ export default function UploadDocumentForm({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // const url = await generateUploadUrl();
+    const url = await generateUploadUrl();
 
-    // const result = await fetch(url, {
-    //   method: "POST",
-    //   headers: { "Content-Type": values.file.type },
-    //   body: values.file,
-    // });
-    // const { storageId } = await result.json();
+    const result = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": values.file.type },
+      body: values.file,
+    });
+    const { storageId } = await result.json();
 
     await createDocument({
       title: values.title,
