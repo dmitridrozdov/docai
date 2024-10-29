@@ -28,7 +28,8 @@ import {
   export const createDocument = mutation({
     args: {
       title: v.string(),
-      fileId: v.id("_storage"),
+      // fileId: v.id("_storage"),
+      fileId: v.string(),
     },
     async handler(ctx, args) {
 
