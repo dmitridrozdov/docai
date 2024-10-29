@@ -27,7 +27,8 @@ import {
 
   export const createDocument = mutation({
     args: {
-      title: v.string()
+      title: v.string(),
+      fileId: v.id("_storage"),
     },
     async handler(ctx, args) {
 
@@ -39,7 +40,8 @@ import {
 
       await ctx.db.insert("documents", {
         title: args.title,
-        tokenIdentifier: userId
+        tokenIdentifier: userId,
+        fileId: args.fileId,
       })
     }
   });
