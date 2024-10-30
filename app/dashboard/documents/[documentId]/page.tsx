@@ -42,7 +42,7 @@ export default function DocumentPage({
             <DeleteDocumentButton documentId={document._id} />
           </div>
 
-          <div className="flex gap-12">
+          {/* <div className="flex gap-12">
             <Tabs defaultValue="document" className="w-full">
               <TabsList className="mb-2">
                 <TabsTrigger value="document">Document</TabsTrigger>
@@ -63,7 +63,7 @@ export default function DocumentPage({
                 <ChatPanel documentId={document._id} />
               </TabsContent>
             </Tabs>
-          </div>
+          </div> */}
         </>
       )}
     </main>
