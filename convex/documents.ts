@@ -25,6 +25,49 @@ import {
     },
   });
 
+  // export const getDocument = query({
+  //   args: {
+  //     documentId: v.id("documents"),
+  //   },
+  //   async handler(ctx, args) {
+  //     const accessObj = await hasAccessToDocument(ctx, args.documentId);
+  
+  //     if (!accessObj) {
+  //       return null;
+  //     }
+      
+  //     return {
+  //       ...accessObj.document,
+  //       documentUrl: await ctx.storage.getUrl(accessObj.document.fileId),
+  //     };
+  //   },
+  // });
+
+  export const getDocument = query({
+    args: {
+      documentId: v.id("documents"),
+    },
+    async handler(ctx, args) {
+      const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+
+      if (!userId) {
+        return undefined;
+      }
+
+      const document = await ctx.db.get(args.documentId)
+
+      if (!document) {
+        return null;
+      }
+
+      if (document?.tokenIdentifier !== userId) {
+        return null;
+      }
+
+      return document
+    },
+  });
+
   export const createDocument = mutation({
     args: {
       title: v.string(),
