@@ -64,15 +64,14 @@ import {
         return null;
       }
 
-      return document
+      return { ...document, documentUrl: await ctx.storage.getUrl(document.fileId) };
     },
   });
 
   export const createDocument = mutation({
     args: {
       title: v.string(),
-      // fileId: v.id("_storage"),
-      fileId: v.string(),
+      fileId: v.id("_storage"),
     },
     async handler(ctx, args) {
 
