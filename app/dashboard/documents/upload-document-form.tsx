@@ -53,8 +53,7 @@ export default function UploadDocumentForm({
 
     await createDocument({
       title: values.title,
-      // fileId: storageId as Id<"_storage">,
-      fileId: storageId as string,
+      fileId: storageId as Id<"_storage">,
     //   orgId: organization.organization?.id,
     });
     onUpload();
