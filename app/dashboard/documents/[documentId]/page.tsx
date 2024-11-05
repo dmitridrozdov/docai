@@ -35,16 +35,20 @@ export default function DocumentPage({
       )}
 
       {document && (
-        <>
-          <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold">{document.title}</h1>
-            <div>
-              {document.documentUrl && (
-                <iframe src={document.documentUrl}  />
-              )}
+        <main className="space-y-8 p-24">
+            <div className="flex  items-center justify-between">
+              <h1 className="text-4xl font-bold">{document.title}</h1>
+            </div>
+            <div className="flex gap-2">
+              <div className="bg-gray-400 p-4 rounded-xl flex-1 h-[300px]">
+                {document.documentUrl && (
+                  <iframe src={document.documentUrl}  />
+                )}
+              </div>
+              <div className="bg-gray-200 p-4 rounded-xl flex-1 h-[300px]">
+              </div>
             </div>
             {/* <DeleteDocumentButton documentId={document._id} /> */}
-          </div>
 
           {/* <div className="flex gap-12">
             <Tabs defaultValue="document" className="w-full">
@@ -68,7 +72,7 @@ export default function DocumentPage({
               </TabsContent>
             </Tabs>
           </div> */}
-        </>
+        </main>
       )}
     </main>
   );
