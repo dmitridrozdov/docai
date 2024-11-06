@@ -45,8 +45,7 @@ export default function DocumentPage({
                   <iframe src={document.documentUrl}  />
                 )}
               </div>
-              <div className="bg-gray-200 p-4 rounded-xl flex-1 h-[300px]">
-              </div>
+              <ChatPanel documentId={document._id} />
             </div>
             {/* <DeleteDocumentButton documentId={document._id} /> */}
 
