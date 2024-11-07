@@ -9,6 +9,7 @@ import {
     query,
   } from "./_generated/server";
   import { ConvexError, v } from "convex/values";
+  import { api, internal } from "./_generated/api";
 
   export const getDocuments = query({
     async handler(ctx) {
@@ -92,3 +93,34 @@ import {
   export const generateUploadUrl = mutation(async (ctx) => {
     return await ctx.storage.generateUploadUrl();
   });
+
+
+
+
+export const askQuestion = action({
+  args: {
+    question: v.string(),
+    documentId: v.id("documents"),
+  },
+  async handler(ctx, args) {
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+
+    if (!userId) {  
+      throw new ConvexError("Unauthorized");
+    }
+
+    const document = await ctx.runQuery(api.documents.getDocument, {
+      documentId: args.documentId,
+    });
+
+    if (!document) {
+      throw new ConvexError("Document not found");
+    }
+
+    const file = await ctx.storage.get(document.fileId);
+
+    if (!file) {
+      throw new ConvexError("File not found");
+    }
+  }
+});
