@@ -129,11 +129,30 @@ export const askQuestion = action({
       throw new ConvexError("File not found");
     }
 
-    const chatComplete = await openai.chat.completions.create({
-      messages: [{role: "user", content: "say this is the test"}],
+    // const chatComplete = await openai.chat.completions.create({
+    //   messages: [{role: "user", content: "say this is the test"}],
+    //   model: "gpt-3.5-turbo",
+    // })
+
+    const text = await file.text();
+
+    const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
+    await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `Here is a text file: ${text}`,
+        },
+        {
+          role: "user",
+          content: `please answer this question: ${args.question}`,
+        },
+      ],
       model: "gpt-3.5-turbo",
-    })
-    console.log(chatComplete.choices[0].message.content)
-    return chatComplete.choices[0].message.content
+    });
+
+    console.log(chatCompletion.choices[0].message.content)
+    
+    return chatCompletion.choices[0].message.content
   }
 });
