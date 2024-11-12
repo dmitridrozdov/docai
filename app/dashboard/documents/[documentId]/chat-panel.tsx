@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { useQuery } from "convex/react";
+import { useAction, useQuery } from "convex/react";
 import { QuestionForm } from "./question-form";
 
 export default function ChatPanel({
