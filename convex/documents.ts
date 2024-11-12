@@ -11,6 +11,12 @@ import {
   import { ConvexError, v } from "convex/values";
   import { api, internal } from "./_generated/api";
 
+  import OpenAI from "openai";
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   export const getDocuments = query({
     async handler(ctx) {
       const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -122,5 +128,12 @@ export const askQuestion = action({
     if (!file) {
       throw new ConvexError("File not found");
     }
+
+    const chatComplete = await openai.chat.completions.create({
+      messages: [{role: "user", content: "say this is the test"}],
+      model: "gpt-3.5-turbo",
+    })
+    console.log(chatComplete.choices[0].message.content)
+    return chatComplete.choices[0].message.content
   }
 });
