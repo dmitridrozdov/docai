@@ -32,7 +32,7 @@ export function QuestionForm({ documentId }: { documentId: Id<"documents"> }) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await askQuestion({ question: values.text, documentId });
+    await askQuestion({ question: values.text, documentId }).then(console.log);//DD added console.log
     form.reset();
   }
 
