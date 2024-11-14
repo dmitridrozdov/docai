@@ -129,11 +129,6 @@ export const askQuestion = action({
       throw new ConvexError("File not found");
     }
 
-    // const chatComplete = await openai.chat.completions.create({
-    //   messages: [{role: "user", content: "say this is the test"}],
-    //   model: "gpt-3.5-turbo",
-    // })
-
     const text = await file.text();
 
     const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
