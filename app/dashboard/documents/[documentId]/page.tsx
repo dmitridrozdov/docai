@@ -39,13 +39,31 @@ export default function DocumentPage({
             <div className="flex  items-center justify-between">
               <h1 className="text-4xl font-bold">{document.title}</h1>
             </div>
+            <Tabs defaultValue="document" className="w-full">
+                <TabsList>
+                    <TabsTrigger value="document">
+                        document
+                    </TabsTrigger>
+                    <TabsTrigger value="chat">
+                        chat
+                    </TabsTrigger>
+                    
+                    <TabsContent value="document">
+                      <div className="bg-gray-400 p-4 rounded-xl flex-1 h-[300px]">
+                        {document.documentUrl && (
+                          <iframe src={document.documentUrl}  />
+                        )}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="chat">
+                      <ChatPanel documentId={document._id} />
+                    </TabsContent>
+                </TabsList>
+            </Tabs>
             <div className="flex gap-2">
-              <div className="bg-gray-400 p-4 rounded-xl flex-1 h-[300px]">
-                {document.documentUrl && (
-                  <iframe src={document.documentUrl}  />
-                )}
-              </div>
-              <ChatPanel documentId={document._id} />
+              
+              
             </div>
             {/* <DeleteDocumentButton documentId={document._id} /> */}
 
