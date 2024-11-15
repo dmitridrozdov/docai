@@ -100,54 +100,51 @@ import {
     return await ctx.storage.generateUploadUrl();
   });
 
+  export const askQuestion = action({
+    args: {
+      question: v.string(),
+      documentId: v.id("documents"),
+    },
+    async handler(ctx, args) {
+      const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
 
+      if (!userId) {  
+        throw new ConvexError("Unauthorized");
+      }
 
+      const document = await ctx.runQuery(api.documents.getDocument, {
+        documentId: args.documentId,
+      });
 
-export const askQuestion = action({
-  args: {
-    question: v.string(),
-    documentId: v.id("documents"),
-  },
-  async handler(ctx, args) {
-    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+      if (!document) {
+        throw new ConvexError("Document not found");
+      }
 
-    if (!userId) {  
-      throw new ConvexError("Unauthorized");
+      const file = await ctx.storage.get(document.fileId);
+
+      if (!file) {
+        throw new ConvexError("File not found");
+      }
+
+      const text = await file.text();
+
+      const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
+      await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: `Here is a text file: ${text}`,
+          },
+          {
+            role: "user",
+            content: `please answer this question: ${args.question}`,
+          },
+        ],
+        model: "gpt-3.5-turbo",
+      });
+
+      console.log(chatCompletion.choices[0].message.content)
+      
+      return chatCompletion.choices[0].message.content
     }
-
-    const document = await ctx.runQuery(api.documents.getDocument, {
-      documentId: args.documentId,
-    });
-
-    if (!document) {
-      throw new ConvexError("Document not found");
-    }
-
-    const file = await ctx.storage.get(document.fileId);
-
-    if (!file) {
-      throw new ConvexError("File not found");
-    }
-
-    const text = await file.text();
-
-    const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
-    await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: `Here is a text file: ${text}`,
-        },
-        {
-          role: "user",
-          content: `please answer this question: ${args.question}`,
-        },
-      ],
-      model: "gpt-3.5-turbo",
-    });
-
-    console.log(chatCompletion.choices[0].message.content)
-    
-    return chatCompletion.choices[0].message.content
-  }
-});
+  });
