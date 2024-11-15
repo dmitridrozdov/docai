@@ -13,13 +13,6 @@ export function Header() {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex gap-8 items-center">
           <Link href="/" className="flex items-center gap-4 text-2xl">
-            <Image
-              src="/logo.png"
-              width={40}
-              height={40}
-              className="rounded"
-              alt="an image of a brain"
-            />
             DOC AI
           </Link>
 
