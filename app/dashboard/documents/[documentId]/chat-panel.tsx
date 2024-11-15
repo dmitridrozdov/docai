@@ -15,7 +15,7 @@ export default function ChatPanel({
 
   return (
     <div className="dark:bg-gray-900 bg-slate-100 flex flex-col gap-2 p-6 rounded-xl">
-      <div className="h-[350px] overflow-y-auto space-y-3">
+      <div className="overflow-y-auto space-y-3">
         <div className="dark:bg-slate-950 rounded p-3">
           AI: Ask any question using AI about this document below:
         </div>
