@@ -11,7 +11,7 @@ export default function ChatPanel({
 }: {
   documentId: Id<"documents">;
 }) {
-  // const chats = useQuery(api.chats.getChatsForDocument, { documentId });
+  const chats = useQuery(api.chats.getChatsForDocument, { documentId });
 
   return (
     <div className="dark:bg-gray-900 bg-slate-100 flex flex-col gap-2 p-6 rounded-xl">
@@ -19,7 +19,7 @@ export default function ChatPanel({
         <div className="dark:bg-slate-950 rounded p-3">
           AI: Ask any question using AI about this document below:
         </div>
-        {/* {chats?.map((chat) => (
+        {chats?.map((chat) => (
           <div
             className={cn(
               {
@@ -32,7 +32,7 @@ export default function ChatPanel({
           >
             {chat.isHuman ? "YOU" : "AI"}: {chat.text}
           </div>
-        ))} */}
+        ))}
       </div>
 
       <div className="flex gap-1">
