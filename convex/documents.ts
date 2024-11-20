@@ -10,6 +10,7 @@ import {
   } from "./_generated/server";
   import { ConvexError, v } from "convex/values";
   import { api, internal } from "./_generated/api";
+  import { Id } from "./_generated/dataModel";
 
   import OpenAI from "openai";
 
@@ -32,23 +33,37 @@ import {
     },
   });
 
-  // export const getDocument = query({
-  //   args: {
-  //     documentId: v.id("documents"),
-  //   },
-  //   async handler(ctx, args) {
-  //     const accessObj = await hasAccessToDocument(ctx, args.documentId);
+  export async function hasAccessToDocument(
+    ctx: MutationCtx | QueryCtx,
+    documentId: Id<"documents">
+  ) {
+    const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
   
-  //     if (!accessObj) {
-  //       return null;
-  //     }
-      
-  //     return {
-  //       ...accessObj.document,
-  //       documentUrl: await ctx.storage.getUrl(accessObj.document.fileId),
-  //     };
-  //   },
-  // });
+    if (!userId) {
+      return null;
+    }
+  
+    const document = await ctx.db.get(documentId);
+  
+    if (!document) {
+      return null;
+    }
+    
+    if (document?.tokenIdentifier !== userId) {
+      return null;
+    }
+
+    return {document, userId};
+  }
+
+  export const hasAccessToDocumentQuery = internalQuery({
+    args: {
+      documentId: v.id("documents"),
+    },
+    async handler(ctx, args) {
+      return await hasAccessToDocument(ctx, args.documentId);
+    },
+  });
 
   export const getDocument = query({
     args: {
@@ -106,21 +121,15 @@ import {
       documentId: v.id("documents"),
     },
     async handler(ctx, args) {
-      const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
-
-      if (!userId) {  
-        throw new ConvexError("Unauthorized");
-      }
-
-      const document = await ctx.runQuery(api.documents.getDocument, {
+      const accessObject = await ctx.runQuery(internal.documents.hasAccessToDocumentQuery, {
         documentId: args.documentId,
-      });
+      })
 
-      if (!document) {
-        throw new ConvexError("Document not found");
+      if (!accessObject) {
+        throw new ConvexError("You don't have access to this document");
       }
 
-      const file = await ctx.storage.get(document.fileId);
+      const file = await ctx.storage.get(accessObject.document.fileId);
 
       if (!file) {
         throw new ConvexError("File not found");
@@ -129,19 +138,26 @@ import {
       const text = await file.text();
 
       const chatCompletion: OpenAI.Chat.Completions.ChatCompletion =
-      await openai.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: `Here is a text file: ${text}`,
-          },
-          {
-            role: "user",
-            content: `please answer this question: ${args.question}`,
-          },
-        ],
-        model: "gpt-3.5-turbo",
-      });
+        await openai.chat.completions.create({
+          messages: [
+            {
+              role: "system",
+              content: `Here is a text file: ${text}`,
+            },
+            {
+              role: "user",
+              content: `please answer this question: ${args.question}`,
+            },
+          ],
+          model: "gpt-3.5-turbo",
+        });
+
+        await ctx.runMutation(internal.chats.createChatRecord, {
+          documentId: args.documentId,
+          text: args.question,
+          isHuman: true,
+          tokenIdentifier: accessObject.userId,
+        });
 
       console.log(chatCompletion.choices[0].message.content)
       
