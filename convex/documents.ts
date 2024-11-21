@@ -159,8 +159,17 @@ import {
           tokenIdentifier: accessObject.userId,
         });
 
-      console.log(chatCompletion.choices[0].message.content)
+        const response =
+          chatCompletion.choices[0].message.content ??
+          "could not generate a response";
+  
+        await ctx.runMutation(internal.chats.createChatRecord, {
+          documentId: args.documentId,
+          text: response,
+          isHuman: false,
+          tokenIdentifier: accessObject.userId,
+        });
       
-      return chatCompletion.choices[0].message.content
+      return response
     }
   });
